@@ -16,7 +16,7 @@ module.exports = function(app) {
 
 //getting the workouts to display
       app.get("/api/workouts", function(req, res) {
-        db.Workout.find({}).then(function(dbWorkouts) {
+        db.Workout.find().then(function(dbWorkouts) {
           console.log('dbWorkouts', dbWorkouts)
           res.json(dbWorkouts);
         });
@@ -31,7 +31,10 @@ module.exports = function(app) {
       });
 
        app.put("/api/workouts/:id", function(req, res) {
-        db.Workout.findByIdAndUpdate({_id: req.params.id }).then(function(dbWorkouts) {
+        db.Workout.findByIdAndUpdate({_id: req.params.id} ,
+           { $push: {exercises: req.body}},
+           {new: true}
+        ).then(function(dbWorkouts) {
           console.log('dbWorkouts', dbWorkouts)
           res.json(dbWorkouts);
         });
